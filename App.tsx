@@ -6,113 +6,146 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import HomeScreen from './src/screens/home/HomeScreen';
+import LoginScreen from './src/screens/login/LoginScreen';
+import SignUpScreen from './src/screens/signUp/SignUpScreen';
+import DashboardScreen from './src/screens/expenses/DashboardScreen';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import DashboardNavigation from './src/navigation/DashboardNavigation';
+import GroupComponent from './src/components/GroupComponent';
+import GroupMember from './src/components/GroupMember';
+import AddExpense from './src/screens/expenses/AddExpense';
+const navTheme = DefaultTheme;
+navTheme.colors.background = '#ffffff';
+import {MyProvider} from './src/context/AuthContext';
+import CategoryIcons from './src/components/CategoryIcons';
+import ContactList from './src/components/ContactList';
+import AddGroupMember from './src/screens/expenses/AddGroupMember';
+import VerificationContactInfo from './src/screens/expenses/VerificationContactInfo';
+import OtpVerifcation from './src/screens/signUp/OtpVerifcation';
+export type RootStackParamList = {
+  Home: undefined;
+  login: undefined;
+  signUp: undefined;
+  dashboardNaviagation: undefined;
+  group: undefined;
+  member: {selectedNumber: Array<any>} | undefined | any;
+  addExpense: undefined;
+  IconPage: undefined;
+  contactList: {selectedIconUrl: string} | undefined;
+  addGroupMember: undefined;
+  VerificationContact: {selectedNumber: Array<any>} | undefined;
+  otp: any | undefined;
+};
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer theme={navTheme}>
+      <MyProvider>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: 'homeScreen',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="login"
+            component={LoginScreen}
+            options={{
+              title: 'homeScreen',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="signUp"
+            component={SignUpScreen}
+            options={{
+              title: 'signUp',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="dashboardNaviagation"
+            component={DashboardNavigation}
+            options={{
+              title: 'dashboardNavigation',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="group"
+            component={GroupComponent}
+            options={{
+              title: 'group',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="member"
+            component={GroupMember}
+            options={{
+              title: 'member',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="addExpense"
+            component={AddExpense}
+            options={{
+              title: 'addExpense',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="contactList"
+            component={ContactList}
+            options={{
+              title: '',
+            }}
+          />
+
+          <Stack.Screen
+            name="IconPage"
+            component={CategoryIcons}
+            options={{
+              title: '',
+              // headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="addGroupMember"
+            component={AddGroupMember}
+            options={{
+              title: '',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="VerificationContact"
+            component={VerificationContactInfo}
+            options={{
+              title: 'Verify contact info',
+              // headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="otp"
+            component={OtpVerifcation}
+            options={{
+              title: 'Otp verificaiton',
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </MyProvider>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
